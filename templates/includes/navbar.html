@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+  <div class="container">
+
+    <!-- Brand links to Home -->
+    <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+        Scentaholic Club
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto">
+
+        <!-- Explicit Home link -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'home' %}">Home</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Catalog</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Club</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Weekly Packs</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Vote</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Membership</a>
+        </li>
+
+      </ul>
+    </div>
+
+  </div>
+</nav>
