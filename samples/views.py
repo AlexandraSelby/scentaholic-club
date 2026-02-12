@@ -1,3 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
+from django.shortcuts import render
+
+def packs_home(request):
+    return render(request, "samples/packs_home.html")
+
