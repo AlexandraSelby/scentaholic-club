@@ -1,6 +1,5 @@
-from django.urls import include
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from home.views import home
 from catalog.views import catalog_home
@@ -12,11 +11,14 @@ from checkout.views import membership_home
 urlpatterns = [
     path("admin/", admin.site.urls),
 
+    # Auth
+    path("accounts/", include("django.contrib.auth.urls")),
+
+    # Site pages
     path("", home, name="home"),
     path("catalog/", catalog_home, name="catalog"),
     path("club/", club_home, name="club"),
     path("packs/", packs_home, name="packs"),
     path("poll/", poll_home, name="poll"),
     path("membership/", membership_home, name="membership"),
-    path("accounts/", include("django.contrib.auth.urls")),
 ]

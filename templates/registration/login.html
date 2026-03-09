@@ -1,11 +1,12 @@
-<ul class="navbar-nav ms-auto">
-  {% if user.is_authenticated %}
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-    </li>
-  {% else %}
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'login' %}">Login</a>
-    </li>
-  {% endif %}
-</ul>
+{% extends "base.html" %}
+{% block title %}Login | Scentaholic Club{% endblock %}
+
+{% block content %}
+<h1>Login</h1>
+
+<form method="post" class="mt-3" style="max-width: 420px;">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Log in</button>
+</form>
+{% endblock %}
