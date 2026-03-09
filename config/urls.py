@@ -1,3 +1,4 @@
+from django.urls import include
 from django.contrib import admin
 from django.urls import path
 
@@ -17,4 +18,5 @@ urlpatterns = [
     path("packs/", packs_home, name="packs"),
     path("poll/", poll_home, name="poll"),
     path("membership/", membership_home, name="membership"),
+    path("accounts/", include("django.contrib.auth.urls")),
 ]
