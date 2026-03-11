@@ -1,3 +1,20 @@
+#### Project architecture
+
+I structured the project as a multi-app Django application so that each core area of functionality remains modular, reusable, and easier to maintain as development progresses.
+
+Each app has a clearly defined responsibility:
+
+- `home` handles landing pages and shared entry-point views
+- `catalog` manages fragrance-related data such as brands and fragrances
+- `club` is intended for discussion and community interaction
+- `samples` manages weekly sample pack functionality
+- `polls` supports fragrance voting logic
+- `checkout` will manage Stripe subscription flow
+- `profiles` will support user-specific account and membership information
+- `quiz` is reserved for integrating and adapting previous quiz work into this project
+
+This structure makes the project easier to scale, test, and document, while also meeting the requirement for multiple reusable apps within a Django full-stack project.
+
 ## Development Progress
 First I focused on establishing a stable project foundation, ensuring the core structure was in place before building database-driven features.
 ---
