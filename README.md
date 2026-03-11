@@ -92,6 +92,49 @@ To ensure I could visually test routing and layout early, I implemented placehol
 - Membership
 
 These placeholders act as a working navigation skeleton and will be expanded into database-driven pages in the next development phase.
+
+## Weekly Pack Feature Development
+### Weekly pack database structure
+
+The first database-driven feature implemented in the project was the Weekly Packs system.
+
+Two related models were created inside the `samples` app:
+
+- `WeeklyPack` – represents a weekly fragrance discovery pack and stores the pack title, date range, publication status, and creation timestamp.
+- `PackItem` – links individual fragrances to a weekly pack and stores the sample size for each item.
+
+This relationship allows each pack to contain multiple fragrances while preventing the same fragrance from being added twice to the same pack.
+
+### Admin management
+
+Both models were registered within the Django admin interface so that pack content can be created and managed without requiring custom forms.
+
+Using the admin panel, it became possible to:
+
+- create a new weekly pack
+- set the pack publication status
+- define the week start and end dates
+- add multiple fragrances to the pack using inline pack items
+
+This approach allowed the database structure to be tested early before building user-facing interfaces.
+
+### Public display of packs
+
+Once the models were confirmed to work in the admin panel, the `/packs/` page was connected to the database.
+
+The corresponding view retrieves all published weekly packs and passes them to the template using Django’s ORM:
+
+`WeeklyPack.objects.filter(is_published=True)`
+
+The template was then updated to dynamically render:
+
+- the pack title
+- the weekly date range
+- the fragrances included in the pack
+- the sample size for each fragrance
+
+This replaced the original placeholder page with dynamic content rendered from the database.
+
 ### Navigation Evidence
 
 The following screenshots confirm that the navigation system renders correctly across all placeholder pages:
@@ -124,3 +167,5 @@ I used a “one commit per meaningful change” approach. This allows an assesso
 | `/accounts/profile/` redirect after login | Django redirects authenticated users to `/accounts/profile/` by default when no redirect is configured. | Added `LOGIN_REDIRECT_URL = "/"` and `LOGOUT_REDIRECT_URL = "/"` in `settings.py` to redirect users to the homepage. |
 | Logout returned HTTP 405 Method Not Allowed | Django's logout view requires a POST request for security, but the navigation initially attempted to log out using a GET link. | Replaced the logout navigation link with a POST form submission in the navbar. |
 | Login page rendering incorrectly | The login template initially contained misplaced navigation markup rather than the authentication form. | Recreated `templates/registration/login.html` using Django's authentication form structure. |
+
+| Weekly packs did not render correctly on the public page | The template content block was closed before the pack loop, preventing the pack items from being rendered inside the layout. | The `{% endblock %}` tag was moved to the bottom of the template so the pack loop rendered correctly within the page content block. |
