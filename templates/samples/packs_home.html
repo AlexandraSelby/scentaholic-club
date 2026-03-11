@@ -12,6 +12,15 @@
   <div class="card-body">
     <h5 class="card-title">{{ pack.title }}</h5>
     <p>Week: {{ pack.week_start }} – {{ pack.week_end }}</p>
+
+    <h6>Included fragrances:</h6>
+    <ul>
+      {% for item in pack.items.all %}
+        <li>{{ item.fragrance.name }} by {{ item.fragrance.brand.name }} ({{ item.sample_size_ml }}ml)</li>
+      {% empty %}
+        <li>No fragrances added to this pack yet.</li>
+      {% endfor %}
+    </ul>
   </div>
 </div>
 {% empty %}
