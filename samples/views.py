@@ -1,7 +1,12 @@
 from django.shortcuts import render
+from .models import WeeklyPack
 
-from django.shortcuts import render
 
 def packs_home(request):
-    return render(request, "samples/packs_home.html")
+    packs = WeeklyPack.objects.filter(is_published=True)
 
+    return render(
+        request,
+        "samples/packs_home.html",
+        {"packs": packs}
+    )
