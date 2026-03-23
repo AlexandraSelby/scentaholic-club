@@ -5,6 +5,7 @@ from catalog.models import Fragrance
 
 class WeeklyPoll(models.Model):
     title = models.CharField(max_length=120)
+    fragrances = models.ManyToManyField(Fragrance, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
