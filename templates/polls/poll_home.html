@@ -8,12 +8,23 @@
   <h2>{{ poll.title }}</h2>
   <p>Choose up to three fragrances for next week’s pack.</p>
 
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit Vote</button>
-  </form>
+  {% if has_voted %}
+    <p><strong>Your vote has already been submitted.</strong></p>
+    <ul>
+      {% for vote in existing_votes %}
+        <li>{{ vote.fragrance.name }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Submit Vote</button>
+    </form>
+  {% endif %}
+
 {% else %}
   <p>No active poll is available right now.</p>
 {% endif %}
+
 {% endblock %}
