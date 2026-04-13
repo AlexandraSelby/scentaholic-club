@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -26,7 +27,8 @@ def poll_home(request):
                     fragrance=fragrance,
                 )
 
-            return redirect("poll")
+            messages.success(request, "Your vote has been successfully submitted.")
+        return redirect("poll") 
     else:
         form = VoteForm(poll=poll)
 
