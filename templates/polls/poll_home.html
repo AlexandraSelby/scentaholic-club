@@ -7,13 +7,12 @@
 {% if poll %}
   <h2>{{ poll.title }}</h2>
   <p>Choose up to three fragrances for next week’s pack.</p>
-  <ul>
-  {% for fragrance in poll.fragrances.all %}
-    <li>{{ fragrance.name }} by {{ fragrance.brand.name }}</li>
-  {% empty %}
-    <li>No fragrances linked to this poll yet.</li>
-  {% endfor %}
-</ul>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Vote</button>
+  </form>
 {% else %}
   <p>No active poll is available right now.</p>
 {% endif %}
