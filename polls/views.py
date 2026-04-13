@@ -13,7 +13,10 @@ def poll_home(request):
     if not poll:
         return render(request, "polls/poll_home.html", {"poll": None})
 
-    if request.method == "POST":
+    existing_votes = Vote.objects.filter(user=request.user, poll=poll)
+    has_voted = existing_votes.exists()
+
+    if request.method == "POST" and not has_voted:
         form = VoteForm(request.POST, poll=poll)
         if form.is_valid():
             selected_fragrances = form.cleaned_data["fragrances"]
@@ -28,7 +31,7 @@ def poll_home(request):
                 )
 
             messages.success(request, "Your vote has been successfully submitted.")
-        return redirect("poll") 
+            return redirect("poll")
     else:
         form = VoteForm(poll=poll)
 
@@ -38,5 +41,7 @@ def poll_home(request):
         {
             "poll": poll,
             "form": form,
+            "has_voted": has_voted,
+            "existing_votes": existing_votes,
         },
     )
