@@ -240,7 +240,42 @@ Conditional rendering is used in the template:
   <!-- show form -->
 {% endif %}
 ```
+## Subscription and Payment (Planned Feature)
 
+A subscription-based payment system will be implemented using Stripe to support the core business model of the platform.
+
+### Purpose and design rationale
+
+The subscription system is intended to:
+
+- Provide users with access to weekly fragrance sample packs
+- Simulate a real-world e-commerce subscription model
+- Support recurring payments for membership-based access
+
+This feature aligns with the project’s goal of offering a scalable fragrance discovery service.
+
+### Planned implementation
+
+The `checkout` app has been created to manage payment functionality.
+
+The planned integration will include:
+
+- Stripe Checkout for secure payment processing
+- Subscription-based billing rather than one-time payments
+- Backend handling of Stripe sessions and webhooks
+- Linking successful payments to user profiles
+
+### Integration with existing features
+
+The subscription system will connect with:
+
+- the weekly pack feature (access to sample packs)
+- the poll system (voting limited to active members)
+- user profiles (tracking membership status)
+
+### Development status
+
+This feature is planned but not yet implemented. It will be completed in a later stage of development.
 #### Evidence
 
 The following screenshots demonstrate the poll system:
