@@ -177,7 +177,6 @@ The following screenshots confirm that the navigation system renders correctly a
 - `docs/screenshots/nav-membership.png`
 
 ### Weekly Poll System
-
 To introduce interactive functionality and support user engagement, a weekly poll system was implemented. This feature allows authenticated users to vote for fragrances that will appear in upcoming sample packs.
 
 #### Purpose and design rationale
@@ -230,6 +229,12 @@ This approach:
 - Reinforces that the action was successful
 
 #### Template logic
+#### Evidence
+
+The following screenshots demonstrate the poll system:
+
+- `docs/screenshots/poll-before-vote.png`
+- `docs/screenshots/poll-after-vote.png`
 
 Conditional rendering is used in the template:
 
@@ -241,6 +246,8 @@ Conditional rendering is used in the template:
 {% endif %}
 ```
 ## Subscription and Payment (Planned Feature)
+
+This implementation demonstrates controlled user interaction, validation logic, and conditional rendering, all of which are key aspects of full-stack Django development.
 
 A subscription-based payment system will be implemented using Stripe to support the core business model of the platform.
 
@@ -276,12 +283,6 @@ The subscription system will connect with:
 ### Development status
 
 This feature is planned but not yet implemented. It will be completed in a later stage of development.
-#### Evidence
-
-The following screenshots demonstrate the poll system:
-
-- `docs/screenshots/poll-before-vote.png`
-- `docs/screenshots/poll-after-vote.png`
 
 ### Git workflow (commit discipline)
 I used a “one commit per meaningful change” approach. This allows an assessor to clearly track the development process feature-by-feature, rather than in large unclear commits.
@@ -293,6 +294,92 @@ I used a “one commit per meaningful change” approach. This allows an assesso
   - `__pycache__` and compiled python files
   - local environment folders
 - Confirmed `db.sqlite3` is not tracked by Git.
+
+## Testing and Validation
+
+Testing was carried out continuously throughout development rather than being left until the end of the project. This made it possible to catch routing issues, template errors, authentication problems, and database display issues as each feature was introduced.
+
+The project has so far been tested in the following areas:
+
+- project setup and routing
+- shared template rendering
+- authentication flow
+- database-driven weekly pack display
+- poll display and voting behaviour
+- Git tracking and repository hygiene
+### Functional Testing
+
+Manual testing was performed to verify that each feature behaves as expected.
+
+#### Navigation and routing
+
+- All navigation links were tested to ensure they route to the correct pages
+- Placeholder pages were confirmed to render correctly before database integration
+- No broken links or routing errors were detected
+
+#### Authentication flow
+
+- Users can successfully log in using Django’s authentication system
+- After login, users are redirected to the homepage as configured
+- Logout functionality works correctly using POST requests
+- Navigation updates dynamically depending on authentication state
+
+#### Weekly pack display
+
+- Weekly packs created in the admin panel appear correctly on the `/packs/` page
+- Only published packs are displayed
+- Pack details including title, date range, and included fragrances render correctly
+- The relationship between packs and fragrances was verified through the UI
+
+#### Poll system behaviour
+
+- The active poll is correctly retrieved and displayed
+- Users can select up to three fragrances
+- Submitting the form stores votes in the database
+- After submission:
+  - the form is hidden
+  - the selected fragrances are displayed instead
+- Duplicate submissions are prevented using vote validation logic
+
+#### Admin panel functionality
+
+- Weekly packs can be created and edited through Django admin
+- Fragrances can be assigned to packs using inline relationships
+- Polls can be created and activated
+- Fragrance data from the catalogue is reusable across features
+### Validation and Error Handling
+
+Basic validation and error handling were implemented to ensure data integrity and prevent incorrect user interactions.
+
+#### Form validation
+
+- The voting form restricts users to selecting a maximum of three fragrances
+- Invalid submissions are prevented at the form level
+- Cleaned data is used before saving votes to the database
+
+#### Duplicate vote prevention
+
+- Existing votes are checked before allowing submission:
+
+`has_voted = Vote.objects.filter(user=request.user, poll=poll).exists()`
+
+- If a user has already voted:
+  - the form is hidden
+  - a confirmation message is displayed instead
+
+This ensures that users cannot submit multiple votes for the same poll.
+
+#### Authentication protection
+
+- The poll view is protected using the `@login_required` decorator
+- Unauthenticated users are redirected to the login page
+- This prevents anonymous voting and ensures accountability
+
+#### Error handling during development
+
+- Common template and routing errors were identified using Django debug messages
+- Issues such as missing templates and incorrect block placement were resolved early
+- Server logs were used to trace and fix issues efficiently
 
 ### Bugs Fixed
 
