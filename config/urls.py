@@ -7,8 +7,10 @@ from club.views import club_home
 from samples.views import packs_home
 from polls.views import poll_home
 from checkout.views import membership_home
+from profiles.views import signup
 
 urlpatterns = [
+    
     path("admin/", admin.site.urls),
 
     # Auth
@@ -21,4 +23,5 @@ urlpatterns = [
     path("packs/", packs_home, name="packs"),
     path("poll/", poll_home, name="poll"),
     path("membership/", membership_home, name="membership"),
+    path("accounts/signup/", signup, name="signup"),
 ]
