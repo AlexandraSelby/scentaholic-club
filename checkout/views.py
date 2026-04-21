@@ -29,8 +29,8 @@ def create_checkout_session(request):
             }
         ],
         mode="subscription",
-        success_url="http://127.0.0.1:8000/checkout/success/",
-        cancel_url="http://127.0.0.1:8000/checkout/cancel/",
+        success_url="http://127.0.0.1:8000/membership/success/",
+        cancel_url="http://127.0.0.1:8000/membership/cancel/",
     )
     return redirect(session.url)
 
