@@ -2,5 +2,11 @@
 {% block title %}Membership | Scentaholic Club{% endblock %}
 {% block content %}
 <h1>Membership</h1>
-<p>This page will handle weekly Stripe subscription (test mode).</p>
+<form action="{% url 'create_checkout' %}" method="POST">
+  {% csrf_token %}
+  <button class="btn btn-primary">
+    Subscribe to Weekly Pack for £5/week
+  </button>
+</form>
+
 {% endblock %}
