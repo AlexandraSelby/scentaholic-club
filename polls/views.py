@@ -16,7 +16,7 @@ def poll_home(request):
     existing_votes = Vote.objects.filter(user=request.user, poll=poll)
     has_voted = existing_votes.exists()
 
-    if request.method == "POST" and not has_voted:
+    if request.method == "POST":
         form = VoteForm(request.POST, poll=poll)
         if form.is_valid():
             selected_fragrances = form.cleaned_data["fragrances"]
@@ -45,7 +45,7 @@ def poll_home(request):
             "existing_votes": existing_votes,
         },
     )
-    @login_required
+@login_required
 def delete_vote(request):
     poll = WeeklyPoll.objects.filter(is_active=True).order_by("-created_at").first()
 

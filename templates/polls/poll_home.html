@@ -29,7 +29,9 @@
     {% csrf_token %}
 
     {% if form.fragrances.errors %}
-      <p style="color: red;">Please select at least one fragrance.</p>
+      {% if form.fragrances.errors %}
+      {{ form.fragrances.errors }}
+    {% endif %}
     {% endif %}
 
     {{ form.fragrances }}
