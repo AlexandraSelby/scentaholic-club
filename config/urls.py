@@ -20,7 +20,7 @@ urlpatterns = [
     path("catalog/", catalog_home, name="catalog"),
     path("club/", club_home, name="club"),
     path("packs/", packs_home, name="packs"),
-    path("poll/", poll_home, name="poll"),
+    path("poll/", include("polls.urls")),
     path("accounts/signup/", signup, name="signup"),
     path("membership/", include("checkout.urls")),
     

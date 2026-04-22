@@ -45,3 +45,12 @@ def poll_home(request):
             "existing_votes": existing_votes,
         },
     )
+    @login_required
+def delete_vote(request):
+    poll = WeeklyPoll.objects.filter(is_active=True).order_by("-created_at").first()
+
+    if poll and request.method == "POST":
+        Vote.objects.filter(user=request.user, poll=poll).delete()
+        messages.success(request, "Your vote has been removed.")
+
+    return redirect("poll")
