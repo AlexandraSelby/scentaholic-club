@@ -6,26 +6,38 @@
 
 {% if poll %}
   <h2>{{ poll.title }}</h2>
-  <p>Choose up to three fragrances for next week’s pack.</p>
+  <p>Select up to three fragrances for next week’s pack.</p>
 
   {% if has_voted %}
-    <p><strong>Your vote has already been submitted.</strong></p>
+    <p><strong>Your vote has been submitted.</strong></p>
+
     <ul>
       {% for vote in existing_votes %}
         <li>{{ vote.fragrance.name }}</li>
       {% endfor %}
     </ul>
+
+    <p>You can update your selection below or remove it completely.</p>
+
     <form method="post" action="{% url 'delete_vote' %}">
-  {% csrf_token %}
-  <button type="submit">Delete my vote</button>
-</form>
-  {% else %}
-    <form method="post">
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Submit Vote</button>
+      <button type="submit">Delete my vote</button>
     </form>
   {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+
+    {% if form.fragrances.errors %}
+      <p style="color: red;">Please select at least one fragrance.</p>
+    {% endif %}
+
+    {{ form.fragrances }}
+
+    <button type="submit">
+      {% if has_voted %}Update Vote{% else %}Submit Vote{% endif %}
+    </button>
+  </form>
 
 {% else %}
   <p>No active poll is available right now.</p>
