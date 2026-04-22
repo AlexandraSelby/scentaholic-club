@@ -15,6 +15,10 @@
         <li>{{ vote.fragrance.name }}</li>
       {% endfor %}
     </ul>
+    <form method="post" action="{% url 'delete_vote' %}">
+  {% csrf_token %}
+  <button type="submit">Delete my vote</button>
+</form>
   {% else %}
     <form method="post">
       {% csrf_token %}
