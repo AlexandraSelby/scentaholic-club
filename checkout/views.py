@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 import stripe
 
 
