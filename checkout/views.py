@@ -11,6 +11,7 @@ def membership_home(request):
     return render(request, "checkout/membership_home.html")
 
 
+@login_required
 def create_checkout_session(request):
     session = stripe.checkout.Session.create(
         payment_method_types=["card"],
