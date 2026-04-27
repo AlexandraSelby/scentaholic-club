@@ -1,7 +1,11 @@
 from django.shortcuts import render
+from .models import Fragrance
 
-from django.shortcuts import render
 
 def catalog_home(request):
-    return render(request, "catalog/catalog_home.html")
-
+    fragrances = Fragrance.objects.all()
+    return render(
+        request,
+        "catalog/catalog_home.html",
+        {"fragrances": fragrances}
+    )
