@@ -146,7 +146,7 @@ Before building the weekly pack and poll features, the core fragrance catalogue 
 The database structure was designed around relational links between:
 
 - Brand → Fragrance  
-- WeeklyPack → PackItem → Fragrance  
+- WeeklyPack → PackItem → Fragrance 
 - WeeklyPoll → Vote → User  
 
 This relational structure supports reusable data relationships and underpins both catalogue and interactive features.
