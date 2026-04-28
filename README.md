@@ -13,7 +13,37 @@ Each app has a clearly defined responsibility:
 - `profiles` will support user-specific account and membership information
 - `quiz` is reserved for integrating and adapting previous quiz work into this project
 
-This structure makes the project easier to scale, test, and document, while also meeting the requirement for multiple reusable apps within a Django full-stack project.
+## User Stories
+
+### First-time visitor
+
+As a first-time visitor, I want to understand what Scentaholic Club offers, so that I can decide whether the subscription concept is relevant to me.
+
+As a first-time visitor, I want to browse fragrance information, so that I can learn what kinds of scents are included in the weekly sample packs.
+
+As a first-time visitor, I want clear navigation, so that I can move between the home page, catalogue, club, packs, voting and membership pages easily.
+
+### Registered user
+
+As a registered user, I want to log in securely, so that I can access member-only features.
+
+As a registered user, I want to vote for fragrances, so that I can help influence future weekly sample packs.
+
+As a registered user, I want to update or delete my vote, so that I remain in control of my selections.
+
+### Subscriber
+
+As a subscriber, I want to access a Stripe checkout flow, so that I can subscribe to the weekly fragrance sample pack.
+
+As a subscriber, I want confirmation after a successful or cancelled payment, so that I understand the result of my transaction.
+
+### Site owner / administrator
+
+As the site owner, I want to manage brands and fragrances through Django Admin, so that catalogue content can be updated without changing code.
+
+As the site owner, I want to create weekly sample packs through Django Admin, so that the subscription content can be updated regularly.
+
+As the site owner, I want to create and manage weekly polls, so that users can vote on future fragrance selections.
 
 ## Technologies Used
 
