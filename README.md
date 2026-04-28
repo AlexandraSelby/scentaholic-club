@@ -15,6 +15,49 @@ Each app has a clearly defined responsibility:
 
 This structure makes the project easier to scale, test, and document, while also meeting the requirement for multiple reusable apps within a Django full-stack project.
 
+## Technologies Used
+
+### Languages
+
+- Python
+- HTML5
+- CSS3
+- JavaScript
+- SQL
+
+### Frameworks and Libraries
+
+- Django
+- Bootstrap 5
+- Gunicorn
+- WhiteNoise
+- dj-database-url
+- psycopg2-binary
+- python-dotenv
+- Stripe Checkout
+
+### Database
+
+- SQLite (development)
+- Heroku PostgreSQL (production)
+
+### Deployment and Hosting
+
+- GitHub
+- Heroku
+
+### Development Tools
+
+- VS Code
+- Git
+- GitHub
+- Django Admin
+- Chrome Developer Tools
+
+### Version Control
+
+Git and GitHub were used throughout development with regular incremental commits to document feature-by-feature progress.
+
 ## Development Progress
 First I focused on establishing a stable project foundation, ensuring the core structure was in place before building database-driven features.
 ---
@@ -98,6 +141,15 @@ These placeholders act as a working navigation skeleton and will be expanded int
 
 Before building the weekly pack and poll features, the core fragrance catalogue structure was introduced.
 
+### Entity Relationship Design
+
+The database structure was designed around relational links between:
+
+- Brand → Fragrance  
+- WeeklyPack → PackItem → Fragrance  
+- WeeklyPoll → Vote → User  
+
+This relational structure supports reusable data relationships and underpins both catalogue and interactive features.
 ### Brand and fragrance models
 
 The `catalog` app was created to manage fragrance-related data using a relational structure.
@@ -245,21 +297,56 @@ Conditional rendering is used in the template:
   <!-- show form -->
 {% endif %}
 ```
-## Subscription and Payment (Planned Feature)
+## Subscription and Payment Integration
 
-This implementation demonstrates controlled user interaction, validation logic, and conditional rendering, all of which are key aspects of full-stack Django development.
-
-A subscription-based payment system will be implemented using Stripe to support the core business model of the platform.
+A working subscription prototype was implemented using Stripe Checkout to support the project’s fragrance membership model.
 
 ### Purpose and design rationale
 
-The subscription system is intended to:
+The subscription system was designed to:
 
-- Provide users with access to weekly fragrance sample packs
-- Simulate a real-world e-commerce subscription model
-- Support recurring payments for membership-based access
+- Provide access to weekly fragrance sample packs
+- Simulate a real-world subscription e-commerce model
+- Support recurring billing for membership access
+- Integrate subscription access with community voting features
 
-This feature aligns with the project’s goal of offering a scalable fragrance discovery service.
+### Stripe implementation
+
+The `checkout` app handles payment functionality.
+
+Implemented features include:
+
+- Stripe Checkout subscription flow
+- Weekly recurring subscription model
+- Success and cancellation routes
+- Authenticated access to checkout
+- Secure Stripe key management using environment variables
+
+### Subscription model
+
+Membership currently includes:
+
+- Three curated 5ml fragrance samples weekly
+- Member voting access
+- Community scent discussion concept
+- Weekly “Sniffing Club” subscription model
+
+### Security considerations
+
+Sensitive Stripe credentials are stored securely using:
+
+- local `.env` variables during development
+- Heroku Config Vars in production
+
+No API secrets are stored in the repository.
+
+### Evidence
+
+The subscription flow was tested successfully in the deployed application, including:
+
+- Membership page
+- Stripe checkout redirect
+- Subscription success page
 
 ### Planned implementation
 
@@ -281,8 +368,93 @@ The subscription system will connect with:
 - user profiles (tracking membership status)
 
 ### Development status
+## Major Development Milestones
 
-This feature is planned but not yet implemented. It will be completed in a later stage of development.
+### Authentication and Access Control
+
+Authentication was extended to protect member-only functionality.
+
+Implemented features included:
+
+- Login protection for voting
+- Login protection for subscription checkout
+- Signup and login access controls
+- Redirect handling for authenticated users
+
+These changes ensured voting and subscription functionality were restricted to registered users.
+
+---
+
+### Weekly Poll CRUD Functionality
+
+The voting system was expanded to support fuller CRUD interaction.
+
+Implemented functionality includes:
+
+- Create votes
+- Update voting selections
+- Delete submitted votes
+- Prevent duplicate voting
+- Active weekly polls driven from the database
+
+This helped satisfy CRUD requirements within the project.
+
+---
+
+### Stripe Subscription Integration
+
+A recurring subscription prototype was implemented using Stripe Checkout.
+
+Features include:
+
+- Weekly subscription checkout flow
+- Success and cancellation routes
+- Authenticated subscription access
+- Secure Stripe key handling through environment variables
+
+---
+
+### Heroku PostgreSQL Production Migration
+
+The application was migrated from local SQLite development to Heroku PostgreSQL in production.
+
+Deployment work included:
+
+- Procfile configuration
+- Gunicorn setup
+- WhiteNoise static file serving
+- Heroku PostgreSQL integration
+- dj-database-url configuration
+- Production migrations
+- Heroku superuser creation
+- Seed data loading using fixtures
+
+---
+
+### Production Data Seeding
+
+Catalogue, weekly pack and poll data were exported from development and loaded into the production database.
+
+This included:
+
+- Fixture export with `dumpdata`
+- Fixture loading into Heroku PostgreSQL
+- Resolving foreign key issues caused by vote data
+
+---
+
+### Content and UX Enhancements
+
+Several content sections were expanded and refined:
+
+- Dynamic fragrance catalogue
+- Club community content
+- Weekly Sniffing Club subscription concept
+- Expanded membership content
+- Internal navigation calls-to-action
+- Responsive Bootstrap card layouts
+
+These additions improved user journey continuity across the application.
 
 ### Git workflow (commit discipline)
 I used a “one commit per meaningful change” approach. This allows an assessor to clearly track the development process feature-by-feature, rather than in large unclear commits.
@@ -381,6 +553,35 @@ This ensures that users cannot submit multiple votes for the same poll.
 - Issues such as missing templates and incorrect block placement were resolved early
 - Server logs were used to trace and fix issues efficiently
 
+
+## Responsive Design Testing
+
+Responsive behaviour was tested across mobile, tablet and desktop screen sizes using Bootstrap layout components and browser viewport testing.
+
+The following pages were tested for responsive layout, readability, navigation behaviour and card stacking:
+
+### Login Page Responsive Test
+![Responsive Login Testing](docs/screenshots/responsive-login.png)
+
+The authentication interface was tested across mobile, tablet and desktop widths to ensure form usability and navigation consistency.
+
+---
+
+### Catalogue Responsive Test
+![Responsive Catalogue Testing](docs/screenshots/responsive-catalog.png)
+
+Catalogue cards were tested across screen sizes to verify card stacking, text readability and responsive grid behaviour.
+
+---
+
+### Club Community Responsive Test
+![Responsive Club Testing](docs/screenshots/responsive-club.png)
+
+Community cards and the Weekly Sniffing Club section were tested across breakpoints to confirm layout adaptability and call-to-action accessibility.
+
+Bootstrap grid layouts and card components were used to support responsive behaviour.
+
+
 ### Bugs Fixed
 
 | Bug / Issue | Cause | Fix |
@@ -391,3 +592,44 @@ This ensures that users cannot submit multiple votes for the same poll.
 | Logout returned HTTP 405 Method Not Allowed | Django's logout view requires a POST request for security, but the navigation initially attempted to log out using a GET link. | Replaced the logout navigation link with a POST form submission in the navbar. |
 | Login page rendering incorrectly | The login template initially contained misplaced navigation markup rather than the authentication form. | Recreated `templates/registration/login.html` using Django's authentication form structure. |
 | Weekly packs did not render correctly on the public page | The template content block was closed before the pack loop, preventing the pack items from being rendered inside the layout. | The `{% endblock %}` tag was moved to the bottom of the template so the pack loop rendered correctly within the page content block. |
+| `no such table: auth_user` and missing production data on Heroku | The deployed application was initially using SQLite rather than the Heroku PostgreSQL database, which caused missing tables and empty production content. | Added Heroku PostgreSQL, configured `dj-database-url`, ran production migrations, created a superuser, and loaded seed data into the production database using Django fixtures. |
+
+## Lessons Learned
+
+Key lessons from development included:
+
+- Importance of separating development and production databases
+- Managing foreign key dependencies when loading fixture data
+- Using environment variables for secure deployment
+- Importance of iterative testing during deployment rather than leaving testing until the end.
+
+
+## Credits
+
+### Content
+
+Fragrance inspiration references used in sample content were based on:
+
+- Diptyque Philosykos  
+- A Lilac A Day  
+- Disumano  
+
+Sample descriptions were written for educational project purposes.
+
+### Documentation References
+
+Django documentation:
+
+https://docs.djangoproject.com/
+
+Stripe documentation:
+
+https://stripe.com/docs
+
+Heroku deployment documentation:
+
+https://devcenter.heroku.com/
+
+### Acknowledgements
+
+Developed as part of the Level 5 Diploma in Web Application Development with Code Institute and University Centre Peterborough.
