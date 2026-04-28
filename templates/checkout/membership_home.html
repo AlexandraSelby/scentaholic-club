@@ -1,12 +1,44 @@
 {% extends "base.html" %}
-{% block title %}Membership | Scentaholic Club{% endblock %}
-{% block content %}
-<h1>Membership</h1>
-<form action="{% url 'create_checkout' %}" method="POST">
-  {% csrf_token %}
-  <button class="btn btn-primary">
-    Subscribe to Weekly Pack for £5/week
-  </button>
-</form>
 
+{% block title %}Membership | Scentaholic Club{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+
+<h1>Join The Weekly Sniffing Club</h1>
+
+<p class="lead">
+Subscribe to receive a curated fragrance discovery pack every week.
+Each pack includes three 5ml samples selected for scent lovers who want
+to explore, discuss and vote together.
+</p>
+
+<div class="card p-4 shadow-sm my-4">
+<h2>What’s Included</h2>
+
+<ul>
+<li>Three curated 5ml fragrance samples every week</li>
+<li>Member voting to influence future sample packs</li>
+<li>Community discussion around each weekly selection</li>
+<li>Niche and independent fragrance discovery</li>
+</ul>
+</div>
+
+<div class="card p-4 shadow-sm my-4">
+<h2>Weekly Subscription</h2>
+
+<p>
+Membership is charged weekly through Stripe test checkout.
+</p>
+
+<p>
+<strong>Price:</strong> £5 per week
+</p>
+
+<a href="{% url 'create_checkout' %}" class="btn btn-dark btn-lg">
+Subscribe for £5/week
+</a>
+</div>
+
+</section>
 {% endblock %}
