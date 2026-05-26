@@ -35,9 +35,19 @@ Membership is charged weekly through Stripe test checkout.
 <strong>Price:</strong> £5 per week
 </p>
 
+{% if user.is_authenticated and user.profile.is_member %}
+
+<div class="alert alert-success mt-3">
+Your membership is active.
+</div>
+
+{% else %}
+
 <a href="{% url 'create_checkout' %}" class="btn btn-dark btn-lg">
 Subscribe for £5/week
 </a>
+
+{% endif %}
 </div>
 
 </section>

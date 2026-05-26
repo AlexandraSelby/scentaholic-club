@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
+from profiles.models import Profile
 import stripe
 
 
@@ -13,6 +14,11 @@ def membership_home(request):
 
 @login_required
 def create_checkout_session(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if profile.is_member:
+        return redirect("/membership/success/")
+
     session = stripe.checkout.Session.create(
         payment_method_types=["card"],
         line_items=[
@@ -37,7 +43,12 @@ def create_checkout_session(request):
     return redirect(session.url)
 
 
+@login_required
 def success(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    profile.is_member = True
+    profile.save()
+
     return render(request, "checkout/success.html")
 
 
