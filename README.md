@@ -72,6 +72,149 @@ As the site owner, I want to create and manage weekly polls, so that users can v
 - Heroku PostgreSQL (production)
 
 ### Deployment and Hosting
+## Heroku Deployment
+
+The project was deployed using Heroku with a PostgreSQL production database.
+
+### Deployment Process
+
+#### 1. Create Heroku application
+
+A new Heroku application was created:
+
+```bash
+heroku create scentaholic-club-alexandra
+```
+
+---
+
+#### 2. Add Heroku PostgreSQL
+
+A PostgreSQL database was attached to the application through the Heroku Resources tab.
+
+This automatically generated the `DATABASE_URL` environment variable used by Django in production.
+
+---
+
+#### 3. Install production dependencies
+
+The following packages were required for deployment:
+
+```bash
+pip install gunicorn
+pip install dj-database-url
+pip install psycopg2-binary
+pip install whitenoise
+pip install python-dotenv
+```
+
+Dependencies were added to `requirements.txt` using:
+
+```bash
+pip freeze > requirements.txt
+```
+
+---
+
+#### 4. Configure environment variables
+
+Sensitive credentials were stored using Heroku Config Vars.
+
+The following variables were configured:
+
+```text
+DATABASE_URL
+SECRET_KEY
+DEBUG
+STRIPE_PUBLIC_KEY
+STRIPE_SECRET_KEY
+```
+
+Production debug mode was disabled using:
+
+```text
+DEBUG=False
+```
+
+---
+
+#### 5. Configure Django settings
+
+Production database configuration was added using `dj-database-url`:
+
+```python
+DATABASES = {
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+    )
+}
+```
+
+The Django secret key was moved into environment variables:
+
+```python
+SECRET_KEY = os.getenv("SECRET_KEY")
+```
+
+Production debug configuration:
+
+```python
+DEBUG = os.getenv("DEBUG", "False") == "True"
+```
+
+---
+
+#### 6. Procfile configuration
+
+A `Procfile` was created in the project root:
+
+```text
+web: gunicorn config.wsgi
+```
+
+---
+
+#### 7. Run migrations
+
+Production database migrations were applied using:
+
+```bash
+heroku run python manage.py migrate -a scentaholic-club-alexandra
+```
+
+---
+
+#### 8. Create production superuser
+
+A production superuser was created:
+
+```bash
+heroku run python manage.py createsuperuser -a scentaholic-club-alexandra
+```
+
+---
+
+#### 9. Load production fixture data
+
+Fixture data was loaded into the Heroku PostgreSQL database:
+
+```bash
+heroku run python manage.py loaddata data.json --format=json -a scentaholic-club-alexandra
+```
+
+---
+
+### Final Deployment Verification
+
+Final deployment testing confirmed:
+
+- authentication worked correctly
+- Stripe checkout redirected successfully
+- membership state persisted after payment
+- duplicate subscriptions were prevented
+- weekly packs loaded correctly from PostgreSQL
+- voting functionality worked correctly
+- production environment variables loaded successfully
 
 - GitHub
 - Heroku
@@ -378,16 +521,6 @@ The subscription flow was tested successfully in the deployed application, inclu
 - Stripe checkout redirect
 - Subscription success page
 
-### Planned implementation
-
-The `checkout` app has been created to manage payment functionality.
-
-The planned integration will include:
-
-- Stripe Checkout for secure payment processing
-- Subscription-based billing rather than one-time payments
-- Backend handling of Stripe sessions and webhooks
-- Linking successful payments to user profiles
 
 ### Integration with existing features
 
@@ -632,11 +765,7 @@ Key lessons from development included:
 - Managing foreign key dependencies when loading fixture data
 - Using environment variables for secure deployment
 - Importance of iterative testing during deployment rather than leaving testing until the end.
-You’re right — the code blocks broke because I nested markdown inside markdown.
 
-Use this version instead exactly as written:
-
-````markdown
 ## Resubmission Improvements
 
 ### Security Improvements
@@ -734,7 +863,6 @@ Following resubmission improvements, deployment verification included:
 - verifying Stripe checkout still functioned after security changes
 - verifying active memberships persisted correctly after payment
 - confirming duplicate checkout attempts were prevented
-````
 
 ## Credits
 
