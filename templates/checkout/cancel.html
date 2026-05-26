@@ -1,8 +1,24 @@
 {% extends "base.html" %}
-{% block title %}Payment Cancelled | Scentaholic Club{% endblock %}
+
+{% block title %}Payment Not Completed | Scentaholic Club{% endblock %}
 
 {% block content %}
-<h1>Payment Cancelled</h1>
-<p>Your payment was not completed. You can return and try again whenever you are ready.</p>
-<a href="{% url 'membership' %}">Back to Membership</a>
+<section class="container py-5">
+
+<h1>Payment Not Completed</h1>
+
+<p class="lead">
+Your membership payment was cancelled or could not be completed.
+</p>
+
+<p>
+No membership has been activated and no subscription has been confirmed.
+You can return to the membership page and try again when ready.
+</p>
+
+<a href="{% url 'membership' %}" class="btn btn-dark">
+Return to Membership
+</a>
+
+</section>
 {% endblock %}

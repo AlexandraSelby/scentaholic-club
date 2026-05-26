@@ -864,6 +864,25 @@ Following resubmission improvements, deployment verification included:
 - verifying active memberships persisted correctly after payment
 - confirming duplicate checkout attempts were prevented
 
+### Failed Payment Testing
+
+Stripe test payment failure scenarios were tested using Stripe’s declined payment test card:
+
+```text
+4000 0000 0000 0002
+```
+
+This confirmed that:
+
+- invalid payments are rejected correctly
+- users receive clear payment failure feedback
+- unsuccessful payments do not activate membership status
+- duplicate memberships are not created after failed payment attempts
+
+#### Evidence
+
+![Stripe Failed Payment Test](docs/screenshots/stripe-payment-declined.png)
+
 ## Credits
 
 ### Content
