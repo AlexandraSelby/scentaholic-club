@@ -632,7 +632,109 @@ Key lessons from development included:
 - Managing foreign key dependencies when loading fixture data
 - Using environment variables for secure deployment
 - Importance of iterative testing during deployment rather than leaving testing until the end.
+You’re right — the code blocks broke because I nested markdown inside markdown.
 
+Use this version instead exactly as written:
+
+````markdown
+## Resubmission Improvements
+
+### Security Improvements
+
+Following feedback during assessment, several production security improvements were implemented before resubmission.
+
+#### Environment Variable Security
+
+Sensitive credentials were removed from the codebase and moved into environment variables.
+
+This included:
+
+- `SECRET_KEY`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_PUBLIC_KEY`
+
+The Django secret key is now loaded securely using:
+
+```python
+SECRET_KEY = os.getenv("SECRET_KEY")
+```
+
+The previous exposed secret key was rotated and replaced with a new production key stored only within Heroku Config Vars.
+
+#### Production Debug Protection
+
+Debug mode was disabled in production using environment variable configuration:
+
+```python
+DEBUG = os.getenv("DEBUG", "False") == "True"
+```
+
+Heroku production configuration uses:
+
+```text
+DEBUG=False
+```
+
+This prevents Django debug information and stack traces from being exposed publicly in production.
+
+---
+
+### Membership State and Duplicate Checkout Prevention
+
+The membership system was expanded to persist active membership state using a dedicated `Profile` model linked to authenticated users.
+
+#### Profile Model
+
+A `Profile` model was introduced inside the `profiles` app:
+
+```python
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    is_member = models.BooleanField(default=False)
+```
+
+This allows the application to track whether a user already has an active membership subscription.
+
+#### Successful Payment Handling
+
+The Stripe success view was updated so that successful checkout activates membership automatically:
+
+```python
+profile.is_member = True
+profile.save()
+```
+
+#### Duplicate Subscription Prevention
+
+Additional validation was added to prevent authenticated users from repeatedly creating Stripe checkout sessions after already becoming active members.
+
+If a member already has an active subscription state:
+
+- the checkout flow is blocked
+- the membership page displays an active membership message instead
+- duplicate join actions are prevented
+
+#### Membership Interface Feedback
+
+The membership template now conditionally renders different content depending on membership state:
+
+- Non-members see the subscription button
+- Active members see a success confirmation message
+
+This improved the user experience and resolved the resubmission requirement for clearer payment state feedback.
+
+---
+
+### Updated Deployment Verification
+
+Following resubmission improvements, deployment verification included:
+
+- confirming Heroku Config Vars were correctly configured
+- confirming production migrations completed successfully
+- verifying Stripe checkout still functioned after security changes
+- verifying active memberships persisted correctly after payment
+- confirming duplicate checkout attempts were prevented
+````
 
 ## Credits
 
