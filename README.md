@@ -72,6 +72,7 @@ As the site owner, I want to create and manage weekly polls, so that users can v
 - Heroku PostgreSQL (production)
 
 ### Deployment and Hosting
+
 ## Heroku Deployment
 
 The project was deployed using Heroku with a PostgreSQL production database.
@@ -531,6 +532,7 @@ The subscription system will connect with:
 - user profiles (tracking membership status)
 
 ### Development status
+
 ## Major Development Milestones
 
 ### Authentication and Access Control
@@ -642,6 +644,7 @@ The project has so far been tested in the following areas:
 - database-driven weekly pack display
 - poll display and voting behaviour
 - Git tracking and repository hygiene
+
 ### Functional Testing
 
 Manual testing was performed to verify that each feature behaves as expected.
@@ -882,6 +885,46 @@ This confirmed that:
 #### Evidence
 
 ![Stripe Failed Payment Test](docs/screenshots/stripe-payment-declined.png)
+
+### Verified Stripe Session Testing
+
+Following resubmission feedback, the Stripe success flow was updated so that membership is only activated after the checkout session is verified with Stripe.
+
+The success URL now includes the Stripe checkout session ID:
+
+```python
+success_url=request.build_absolute_uri("/membership/success/") + "?session_id={CHECKOUT_SESSION_ID}"
+```
+
+The success view retrieves the Stripe session and only activates membership when the payment status is confirmed as paid:
+
+```python
+session = stripe.checkout.Session.retrieve(session_id)
+
+if session.payment_status == "paid":
+    profile.is_member = True
+    profile.save()
+```
+
+This prevents users from manually visiting the success URL to activate membership without completing payment.
+
+#### Successful Verified Payment
+
+A successful Stripe test payment was completed using Stripe’s successful test card.
+
+![Successful Verified Payment](docs/screenshots/payment-successful-member.png)
+
+#### Declined Payment
+
+A declined Stripe test payment was completed using Stripe’s declined test card.
+
+![Declined Stripe Payment](docs/screenshots/stripe-payment-declined.png)
+
+#### Invalid Success Route Protection
+
+Direct access to the success URL without a valid Stripe session ID redirects to the payment not completed page.
+
+![Invalid Session Protection](docs/screenshots/payment-declined-nonmember.png)
 
 ## Credits
 
