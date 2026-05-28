@@ -37,7 +37,7 @@ def create_checkout_session(request):
             }
         ],
         mode="subscription",
-        success_url=request.build_absolute_uri("/membership/success/"),
+        success_url=request.build_absolute_uri("/membership/success/") + "?session_id={CHECKOUT_SESSION_ID}",
         cancel_url=request.build_absolute_uri("/membership/cancel/"),
     )
     return redirect(session.url)
@@ -45,11 +45,23 @@ def create_checkout_session(request):
 
 @login_required
 def success(request):
-    profile, created = Profile.objects.get_or_create(user=request.user)
-    profile.is_member = True
-    profile.save()
+    session_id = request.GET.get("session_id")
 
-    return render(request, "checkout/success.html")
+    if not session_id:
+        return redirect("/membership/cancel/")
+
+    try:
+        session = stripe.checkout.Session.retrieve(session_id)
+    except stripe.error.StripeError:
+        return redirect("/membership/cancel/")
+
+    if session.payment_status == "paid":
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        profile.is_member = True
+        profile.save()
+        return render(request, "checkout/success.html")
+
+    return redirect("/membership/cancel/")
 
 
 def cancel(request):
